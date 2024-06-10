@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "python-project"
+version = "0.1.0"
+description = ""
+authors = ["camille-004 <dunningcamille@gmail.com>"]
+readme = "README.md"
+packages = [{include = "python_project"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^8.2.2"
+pytest-mock = "^3.14.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.8"
+mypy = "^1.10.0"
+pre-commit = "^3.7.1"
+
+[tool.ruff]
+line-length = 79
+lint.select = ["E", "F", "I", "A", "C"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
