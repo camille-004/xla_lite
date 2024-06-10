@@ -63,9 +63,11 @@ poetry run pre-commit install
     version = "0.1.0"
     description = "Your project description"
     authors = ["Your Name <your.email@example.com>"]
+    readme = "README.md"
+    packages = [{include = "your_project_name"}]
     ```
 
-    Then, rename the source code directory from `python_project` to your project name.
+    Then, rename the source code directory from `python_project` to the value of `your_project_name`.
 
 2. **Customize or replace the `README`**
 
