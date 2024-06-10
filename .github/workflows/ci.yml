@@ -28,9 +28,6 @@ jobs:
             - name: Run linters
               run: make lint
 
-            - name: Run formatters
-              run: make format
-
             - name: Type-check
               run: make type-check
 
