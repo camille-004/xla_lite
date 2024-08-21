@@ -1,15 +1,16 @@
 [tool.poetry]
-name = "python-project"
+name = "hloport"
 version = "0.1.0"
 description = ""
 authors = ["camille-004 <dunningcamille@gmail.com>"]
 readme = "README.md"
-packages = [{include = "python_project"}]
+packages = [{include = "hloport"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
 pytest = "^8.2.2"
 pytest-mock = "^3.14.0"
+jax = "^0.4.31"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"
