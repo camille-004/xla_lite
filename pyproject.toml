@@ -1,15 +1,17 @@
 [tool.poetry]
-name = "python-project"
+name = "xla_lite"
 version = "0.1.0"
 description = ""
 authors = ["camille-004 <dunningcamille@gmail.com>"]
 readme = "README.md"
-packages = [{include = "python_project"}]
+packages = [{include = "xla_lite"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
 pytest = "^8.2.2"
 pytest-mock = "^3.14.0"
+pydantic = "^2.9.2"
+graphviz = "^0.20.3"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"
