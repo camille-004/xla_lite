@@ -28,7 +28,7 @@ def test_dead_code_elimination(
         "intermediate", op=OpType.MULTIPLY.value, inputs=["input"]
     )
     output_node = Node(
-        "output", OpType.MULTIPLY.value, inputs=["intermediate"]
+        "output", op=OpType.MULTIPLY.value, inputs=["intermediate"]
     )
     output_node.is_output = True
 

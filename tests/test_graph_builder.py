@@ -88,6 +88,7 @@ def test_constant_node_build() -> None:
     graph.add_node.assert_called_once()
     called_with = graph.add_node.call_args[0][0]
     assert isinstance(called_with, Node)
+    assert called_with.tensor is not None
     assert called_with.tensor.data == 5
     assert called_with.op == OpType.CONST.value
     assert node_id == node.node_id
@@ -108,7 +109,7 @@ def test_binary_op_node_build() -> None:
 
 def test_invalid_constant() -> None:
     with pytest.raises(ValueError):
-        ConstantNode("not a tensor")
+        ConstantNode("not a tensor")  # type: ignore
 
 
 def test_complex_Graph_build(graph_builder: GraphBuilder) -> None:

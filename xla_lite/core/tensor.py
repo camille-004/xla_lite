@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 from dataclasses import dataclass, field
+from typing import cast
 
 Data = int | float | list["Data"]
 
@@ -15,13 +16,14 @@ class Tensor:
         self.validate_tensor()
         self.shape = self.compute_shape(self.data)
 
-    def compute_shape(self, data: Data) -> tuple[int]:
+    def compute_shape(self, data: Data) -> tuple[int, ...]:
         shape: list[int] = []
-        while isinstance(data, list):
-            shape.append(len(data))
-            if len(data) == 0:
+        current = data
+        while isinstance(current, list):
+            shape.append(len(current))
+            if len(current) == 0:
                 break
-            data = data[0]
+            current = current[0]
         return tuple(shape)
 
     def validate_tensor(self) -> None:
@@ -51,20 +53,34 @@ class Tensor:
         return self.is_row_vector() or self.is_column_vector()
 
     def is_row_vector(self) -> bool:
-        return self.is_matrix() and self.shape[0] == 1 and self.shape[1] >= 1
+        return (
+            self.is_matrix()
+            and self.shape is not None
+            and self.shape[0] == 1
+            and self.shape[1] >= 1
+        )
 
     def is_column_vector(self) -> bool:
-        return self.is_matrix() and self.shape[1] == 1 and self.shape[0] >= 1
+        return (
+            self.is_matrix()
+            and self.shape is not None
+            and self.shape[1] == 1
+            and self.shape[0] >= 1
+        )
 
     def is_matrix(self) -> bool:
-        return (
-            isinstance(self.data, list)
-            and len(self.data) > 0
-            and all(isinstance(row, list) for row in self.data)
-            and all(
-                all(isinstance(elem, (int, float)) for elem in row)
-                for row in self.data
+        if not isinstance(self.data, list):
+            return False
+        if len(self.data) == 0:
+            return False
+        if not all(isinstance(row, list) for row in self.data):
+            return False
+        return all(
+            all(
+                isinstance(elem, (int, float))
+                for elem in cast(list[int | float], row)
             )
+            for row in self.data
         )
 
     def copy(self) -> Tensor:

@@ -43,14 +43,14 @@ def test_tensor_invalid_creation() -> None:
     with pytest.raises(
         TypeError, match="Tensor data must be an int, float, or nested list."
     ):
-        Tensor("invalid")
+        Tensor("invalid")  # type: ignore
 
     with pytest.raises(
         TypeError, match="All elements must be of the same type."
     ):
-        Tensor([[1, "two", 3]])
+        Tensor([[1, "two", 3]])  # type: ignore
 
     with pytest.raises(
         TypeError, match="All elements must be of the same type."
     ):
-        Tensor(data=[[1, 2], [3, "four"]])
+        Tensor(data=[[1, 2], [3, "four"]])  # type: ignore

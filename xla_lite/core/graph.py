@@ -27,6 +27,7 @@ class Node:
         self.tensor = tensor
         self.op = op
         self.inputs = inputs or []
+        self.is_output = False
 
     def __repr__(self) -> str:
         if self.op:

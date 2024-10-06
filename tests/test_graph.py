@@ -11,6 +11,7 @@ def test_add_node_success() -> None:
     assert node_a in graph.nodes
     assert node_a.node_id == "A"
     assert node_a.op == OpType.CONST.value
+    assert node_a.tensor is not None
     assert node_a.tensor.data == [[1, 2, 3]]
 
 

@@ -1,4 +1,4 @@
 from .graph import Graph, Node, OpType
-from .tensor import Tensor
+from .tensor import Data, Tensor
 
-__all__ = ["Graph", "Node", "OpType", "Tensor"]
+__all__ = ["Graph", "Node", "OpType", "Tensor", "Data"]

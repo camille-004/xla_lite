@@ -91,7 +91,8 @@ def test_add_invalid_types() -> None:
     tensor_b = Tensor([[1, 2, 3]])
     with pytest.raises(
         ValueError,
-        match="Matrices must have the same dimensions for addition.",
+        match="Matrices and vectors must have the same dimensions for "
+        + "addition or subtraction.",
     ):
         add(tensor_a, tensor_b)
 
@@ -100,7 +101,9 @@ def test_add_mismatched_shapes() -> None:
     tensor_a = Tensor([[1, 2, 3]])  # Shape: (1, 3)
     tensor_b = Tensor([[4, 5]])  # Shape: (1, 2)
     with pytest.raises(
-        ValueError, match="Vectors must be of the same length for addition."
+        ValueError,
+        match="Matrices and vectors must have the same dimensions for "
+        + "addition or subtraction.",
     ):
         add(tensor_a, tensor_b)
 
@@ -108,7 +111,8 @@ def test_add_mismatched_shapes() -> None:
     tensor_d = Tensor([[7, 8], [9, 10]])
     with pytest.raises(
         ValueError,
-        match="Matrices must have the same dimensions for addition.",
+        match="Matrices and vectors must have the same dimensions for "
+        + "addition or subtraction.",
     ):
         add(tensor_c, tensor_d)
 
@@ -136,16 +140,6 @@ def test_multiply_vectors() -> None:
     assert result_col.is_column_vector()
     assert result_col.data == [[4], [10], [18]]
     assert result_col.shape == (3, 1)
-
-
-def test_multiply_matrices_not_supported() -> None:
-    tensor_a = Tensor([[1, 2], [3, 4]])
-    tensor_b = Tensor([[5, 6], [7, 8]])
-    with pytest.raises(
-        TypeError,
-        match="Multiplication not supported between these tensor types.",
-    ):
-        multiply(tensor_a, tensor_b)
 
 
 def test_multiply_scalar_vector() -> None:
@@ -190,22 +184,12 @@ def test_multiply_matrix_scalar() -> None:
     assert result.shape == (2, 2)
 
 
-def test_multiply_invalid_types() -> None:
-    tensor_a = Tensor([[1, 2], [3, 4]])
-    tensor_b = Tensor([[1, 2, 3]])
-    with pytest.raises(
-        TypeError,
-        match="Multiplication not supported between these tensor types.",
-    ):
-        multiply(tensor_a, tensor_b)
-
-
 def test_multiply_mismatched_shapes() -> None:
     tensor_a = Tensor([[1, 2, 3]])  # Shape: (1, 3)
     tensor_b = Tensor([[4, 5]])  # Shape: (1, 2)
     with pytest.raises(
         ValueError,
-        match="Vectors must be of the same length for multiplication.",
+        match=r"Incompatible shapes for multiply: \(1, 3\) and \(1, 2\)",
     ):
         multiply(tensor_a, tensor_b)
 

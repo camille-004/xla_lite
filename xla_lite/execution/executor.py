@@ -14,6 +14,10 @@ class Executor:
 
         for node in exec_order:
             if node.op is None or node.op == OpType.CONST.value:
+                if node.tensor is None:
+                    raise ValueError(
+                        f"Constant node '{node.node_id}' has no tensor value."
+                    )
                 self.tensor_vals[node.node_id] = node.tensor
             else:
                 try:

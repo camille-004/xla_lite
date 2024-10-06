@@ -1,4 +1,4 @@
-from xla_lite.core import Graph, Node, OpType
+from xla_lite.core import Graph, Node, OpType, Tensor
 from xla_lite.optimizers import Optimizer, OptStrategy
 
 
@@ -16,15 +16,32 @@ class ConstantFolding(OptStrategy):
 
     @staticmethod
     def _can_fold(graph: Graph, node: Node) -> bool:
-        return all(
-            graph.get_node(input_id) is not None
-            and graph.get_node(input_id).op == OpType.CONST.value
-            for input_id in node.inputs
+        return (
+            all(
+                input_node is not None and input_node.op == OpType.CONST.value
+                for input_id in node.inputs
+                if (input_node := graph.get_node(input_id)) is not None
+            )
+            and len(node.inputs) > 0
         )
 
     @staticmethod
     def _fold_node(graph: Graph, node: Node) -> None:
-        inputs = [graph.get_node(input_id).tensor for input_id in node.inputs]
+        inputs: list[Tensor] = []
+        for input_id in node.inputs:
+            input_node = graph.get_node(input_id)
+            if input_node is None or input_node.tensor is None:
+                raise ValueError(
+                    f"Invalid input node or tensor for node {node.node_id}"
+                )
+            inputs.append(input_node.tensor)
+
+        if node.op is None:
+            raise ValueError(f"Node {node.node_id} has no operation")
+
+        if len(inputs) < 2:
+            return  # Don't fold if there are not enough inputs.
+
         folded = Optimizer._execute_operation(node.op, inputs)
 
         node.op = OpType.CONST.value

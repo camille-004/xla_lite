@@ -1,4 +1,4 @@
-from graphviz import Digraph
+from graphviz import Digraph  # type: ignore
 
 from xla_lite.core import Graph, Node, OpType, Tensor
 from xla_lite.visualization import visualize_graph

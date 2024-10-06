@@ -1,6 +1,7 @@
+import struct
 from typing import Any
 
-from xla_lite.core import Graph, Node, OpType
+from xla_lite.core import Data, Graph, Node, OpType
 from xla_lite.optimizers import OptStrategy
 
 
@@ -46,8 +47,29 @@ class CommonSubexpressionElimination(OptStrategy):
     @staticmethod
     def _get_node_signature(node: Node) -> tuple:
         if node.op == OpType.CONST.value and node.tensor:
-            return (node.op, node.tensor.data.to_bytes())
+            return (
+                node.op,
+                CommonSubexpressionElimination._data_to_bytes(
+                    node.tensor.data
+                ),
+            )
         elif node.op in {OpType.ADD.value, OpType.MULTIPLY.value}:
             return (node.op, tuple(sorted(node.inputs)))
         else:
             return (node.op, tuple(node.inputs))
+
+    @staticmethod
+    def _data_to_bytes(data: Data) -> bytes:
+        if isinstance(data, int):
+            return data.to_bytes(
+                (data.bit_length() + 7) // 8, byteorder="big", signed=True
+            )
+        elif isinstance(data, float):
+            return struct.pack("!d", data)
+        elif isinstance(data, list):
+            return b"".join(
+                CommonSubexpressionElimination._data_to_bytes(item)
+                for item in data
+            )
+        else:
+            raise TypeError(f"Unsupported data type: {type(data)}")

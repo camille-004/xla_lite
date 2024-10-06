@@ -42,8 +42,11 @@ def test_simple_common_subexpression(
 
     strategy.apply(graph)
 
-    assert graph.get_node("add2").inputs == ["add1"]
-    assert graph.get_node("mul").inputs == ["add1", "add1"]
+    add2_node = graph.get_node("add2")
+    mul_node = graph.get_node("mul")
+    assert add2_node is not None and mul_node is not None
+    assert add2_node.inputs == ["add1"]
+    assert mul_node.inputs == ["add1", "add1"]
 
 
 def test_multiple_common_subexpressions(
@@ -82,9 +85,18 @@ def test_multiple_common_subexpressions(
 
     strategy.apply(graph)
 
-    assert graph.get_node("add2").inputs == ["add1"]
-    assert graph.get_node("add4").inputs == ["add3"]
-    assert graph.get_node("mul").inputs == ["add1", "add3"]
+    add2_node = graph.get_node("add2")
+    add4_node = graph.get_node("add4")
+    mul_node = graph.get_node("mul")
+
+    assert (
+        add2_node is not None
+        and add4_node is not None
+        and mul_node is not None
+    )
+    assert add2_node.inputs == ["add1"]
+    assert add4_node.inputs == ["add3"]
+    assert mul_node.inputs == ["add1", "add3"]
 
 
 def test_nested_common_subexpressions(
@@ -116,8 +128,11 @@ def test_nested_common_subexpressions(
 
     strategy.apply(graph)
 
-    assert graph.get_node("mul2").inputs == ["mul1"]
-    assert graph.get_node("result").inputs == ["mul1", "mul1"]
+    mul2_node = graph.get_node("mul2")
+    result_node = graph.get_node("result")
+    assert mul2_node is not None and result_node is not None
+    assert mul2_node.inputs == ["mul1"]
+    assert result_node.inputs == ["mul1", "mul1"]
 
 
 def test_no_common_subexpressions(
@@ -145,9 +160,17 @@ def test_no_common_subexpressions(
 
     strategy.apply(graph)
 
-    assert graph.get_node("add").inputs == ["a", "b"]
-    assert graph.get_node("mul").inputs == ["b", "c"]
-    assert graph.get_node("result").inputs == ["add", "mul"]
+    add_node = graph.get_node("add")
+    mul_node = graph.get_node("mul")
+    result_node = graph.get_node("result")
+    assert (
+        add_node is not None
+        and mul_node is not None
+        and result_node is not None
+    )
+    assert add_node.inputs == ["a", "b"]
+    assert mul_node.inputs == ["b", "c"]
+    assert result_node.inputs == ["add", "mul"]
 
 
 def test_common_subexpression_with_constants(
@@ -177,8 +200,10 @@ def test_common_subexpression_with_constants(
 
     strategy.apply(graph)
 
-    assert graph.get_node("add2").op == OpType.CONST.value
-    assert graph.get_node("add2").inputs == ["add1"]
+    add2_node = graph.get_node("add2")
+    assert add2_node is not None
+    assert add2_node.op == OpType.CONST.value
+    assert add2_node.inputs == ["add1"]
 
 
 def test_common_subexpression_with_commutative_operations(
@@ -210,8 +235,11 @@ def test_common_subexpression_with_commutative_operations(
 
     strategy.apply(graph)
 
-    assert graph.get_node("add2").inputs == ["add1"]
-    assert graph.get_node("mul").inputs == ["add1", "add1"]
+    add2_node = graph.get_node("add2")
+    mul_node = graph.get_node("mul")
+    assert add2_node is not None and mul_node is not None
+    assert add2_node.inputs == ["add1"]
+    assert mul_node.inputs == ["add1", "add1"]
 
 
 def test_common_subexpression_across_different_operations(
@@ -234,8 +262,11 @@ def test_common_subexpression_across_different_operations(
 
     strategy.apply(graph)
 
-    assert graph.get_node("add").inputs == ["a", "b"]
-    assert graph.get_node("mul").inputs == ["a", "b"]
+    add_node = graph.get_node("add")
+    mul_node = graph.get_node("mul")
+    assert add_node is not None and mul_node is not None
+    assert add_node.inputs == ["a", "b"]
+    assert mul_node.inputs == ["a", "b"]
 
 
 def test_common_subexpression_with_multiple_uses(
@@ -269,6 +300,14 @@ def test_common_subexpression_with_multiple_uses(
 
     strategy.apply(graph)
 
-    assert graph.get_node("add2").inputs == ["add1"]
-    assert graph.get_node("add3").inputs == ["add1"]
-    assert graph.get_node("result").inputs == ["add1", "add1", "add1"]
+    add2_node = graph.get_node("add2")
+    add3_node = graph.get_node("add3")
+    result_node = graph.get_node("result")
+    assert (
+        add2_node is not None
+        and add3_node is not None
+        and result_node is not None
+    )
+    assert add2_node.inputs == ["add1"]
+    assert add3_node.inputs == ["add1"]
+    assert result_node.inputs == ["add1", "add1", "add1"]
